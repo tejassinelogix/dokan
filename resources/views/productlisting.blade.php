@@ -15,10 +15,10 @@
          <div class="col-md-2">
             <input type="checkbox" id="check" />
             <label for="check" class="checkBtn">
-               <div class="filter">  
+               <div class="filter">
                   <span style="font-size: 25px;
                      margin-right: 15px;" onclick="openFilter()">Filter
-                  <i class="fa fa-bars" style=""></i>
+                     <i class="fa fa-bars" style=""></i>
                   </span>
                </div>
             </label>
@@ -127,9 +127,9 @@
                <div class="row">
                   <div class="col-md-12">
                      <div class="owl-carousel banner">
-                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}" ></div>
-                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}" ></div>
-                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}" ></div>
+                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}"></div>
+                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}"></div>
+                        <div> <img src="{{'/assets/homecss/images/pro-banner.png'}}"></div>
                      </div>
                   </div>
                </div>
@@ -140,17 +140,17 @@
                      </div>
                   </div>
                </div>
-               
-                <div class="row">
-                @foreach($product as $row)
-                  
+
+               <div class="row">
+                  @foreach($product as $row)
+
                   <div class="col">
                      <div class="hpSlider_item">
                         <a href="#" class="fas fa-heart fav_btn"></a>
                         <div class="hpsl_thum">
                            <a class="hpimgLink" href="#">
-                           <img src="{{ URL::to('/dokan/public') }}/product_images/{{ $row->featured_images }}">                              
-                           </a>          
+                              <img src="{{ URL::to('/dokan/public') }}/product_images/{{ $row->featured_images }}">
+                           </a>
                         </div>
                         <div class="hpdt_dtls hvr-sweep-to-top">
                            <div class="hp_name">
@@ -158,22 +158,22 @@
                               <a href="#">{{$row->product_name}}</a>
                            </div>
                            <div class="hslpricebx">
-                               @if($row->product_old_price !='')
-                        <span class="old-price"> QAR {{ $row->product_old_price }} </span>
-                        @endif
-                        <span class="price"> QAR {{ $row->product_price }} </span>
+                              @if($row->product_old_price !='')
+                              <span class="old-price"> QAR {{ $row->product_old_price }} </span>
+                              @endif
+                              <span class="price"> QAR {{ $row->product_price }} </span>
                            </div>
-                           <a class="add_crt_btn" href="#"></a> 
+                           <a class="add_crt_btn" href="#"></a>
                            <div class="dis_price">50% Off</div>
                         </div>
                      </div>
                   </div>
-                  
+
                   @endforeach
-                  </div>
-                  
-                  
-               
+               </div>
+
+
+
                <div class="row" style="margin-top: 40px;">
                   <div class="col-md-12">
                      <nav aria-label="Page navigation example">

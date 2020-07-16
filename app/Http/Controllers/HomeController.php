@@ -33,7 +33,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //return view('home');
         $new_arrival = Product::where('new_arrival', '1')->paginate(50);
         $data = category::latest()->paginate(50);
         $banner = Homebanner::latest()->paginate(50);

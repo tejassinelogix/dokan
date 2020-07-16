@@ -1,15 +1,9 @@
 @include('layouts.header')
 <section id="main_banner" class="banner-sec">
   <div class="owl-carousel banner">
-
     @foreach($banner as $row)
     <div> <img src="{{ asset('../banner_images/'.$row->bannerimages) }}" alt=""></div>
     @endforeach
-
-    <!--<div> <img src="{{'/assets/homecss/images/banner.jpg'}}" ></div>-->
-    <!--<div> <img src="{{'/assets/homecss/images/banner.jpg'}}" ></div>-->
-    <!--<div> <img src="{{'/assets/homecss/images/banner.jpg'}}" ></div>-->
-    <!--<div> <img src="{{'/assets/homecss/images/banner.jpg'}}" ></div>-->
   </div>
 </section>
 <section class="section-2">
@@ -32,46 +26,29 @@
           foreach ($temp_cat as $key => $value) {
             $temp_cat[$key] = $value['en'];
           }
-
           ?>
           @foreach($data as $key => $row)
           <?php
-
           if (!empty($row->parent_category)) {
             $cat_id = 0;
             if (in_array($row->category_name, $temp_cat)) {
               $cat_id = array_flip($temp_cat);
             }
-
-            // echo "<pre>";
-            //   print_r($cat_id);
-            //   print_r($row->parent_category);
-            //   // print_r($row->category_name);
-            //   exit;  
             $d[] = array(
               'parent_menu' => array('cat_id' => $cat_id[$row->parent_category], 'name' => $row->parent_category, 'child_menu' => array('child_name' => $row->category_name, 'child_id' => $row->id), 'image' => $row->category_images)
             );
             $name_array[$key][$row->parent_category] = $row->parent_category;
             $name_array[$key]['id'] = $key;
-            // dd('if');             
           } else {
-            // dd('else');
             $d[] = array(
               'parent_menu' => array('cat_id' => $row->id, 'name' => $row->category_name, 'child_menu' => array('child_name' => '', 'child_id' => $row->id), 'image' => $row->category_images)
             );
             $name_array[$key][$row->category_name] = $row->category_name;
             $name_array[$key]['id'] = $key;
           }
-          // echo "<pre>";
-          //  print_r($d);
-          //  print_r($d);
-          //  // print_r($row->category_name);
-          //  exit;              
           ?>
           @endforeach
-
           <?php
-
           $set_menu_arr = [];
           $get_columns = [];
           $get_columns_clone = [];
@@ -94,47 +71,18 @@
           }
           ?>
           <?php
-
-          // echo "<pre>";print_r($set_menu_arr);
-          // print_r($get_columns);exit; 
-          // $counter = 0;
-          // foreach ($get_columns as $get_key => $get_value) {
-          //              if($counter != 0){
-          //                 unset($set_menu_arr[$get_key]);
-          //              }
-          //              $counter++;
-          //       }
-
           foreach ($get_columns_clone as $get_key => $get_value) {
-
-
-            // echo "<pre> main values :: <br>";print_r($get_value);
             if (sizeof($get_value) > 1) {
               foreach ($get_value as $subkey => $subvalue) {
-                //                       echo "<pre> test $subkey";
-                //                       print_r($set_menu_arr);
-                // print_r($get_value);exit;
-
-
                 $first_value = key($get_value);
                 if (key($get_value) != $subkey && (isset($set_menu_arr[$subkey]))) {
-                  // $unset_var = (isset($set_menu_arr[$subkey]))? unset($set_menu_arr[$subkey]):"";     
                   unset($set_menu_arr[$subkey]);
                 }
-                # code...
-                // echo "sub key :: $subkey <br>";
-                // echo "<pre> values :: <br>";print_r($subvalue);
-                // echo "<pre> firsst :: <br>";print_r($first_value);
               }
             }
           }
-          // exit;
-          //            echo "<pre> test";
-          // print_r($get_columns_clone);exit;
-
           ?>
           @foreach($set_menu_arr as $cust_row)
-
           <div class="m_cat_item">
             <div class="cat_img hvr-shutter-out-vertical">
               <a href="{{ url('/product_listing',$cust_row['parent_menu']['cat_id'])}}">
@@ -143,9 +91,7 @@
             </div>
             <a style="background: #dbdbdb;" class="cat_name" href="{{ url('/product_listing',$cust_row['parent_menu']['cat_id'])}}"><?php echo $cust_row['parent_menu']['name']; ?></a>
           </div>
-
           @endforeach
-
         </div>
       </div>
     </div>
@@ -596,201 +542,36 @@
 
           </div>
           <div class="tab-pane fade" id="new-arrivals" role="tabpanel" aria-labelledby="new-arrivals-tab">
-
+            @if(isset($new_arrival) && !empty($new_arrival))
             <div class="owl-carousel pdt_slider new_arrivals">
-
+              @foreach ($new_arrival as $new_key => $new_val)
               <div class="hpSlider_item">
                 <a href="#" class="fas fa-heart fav_btn"></a>
                 <div class="hpsl_thum">
                   <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_1.png'}}">
+                    <img src="{{ asset('../product_images/'.$new_val->featured_images)}}">
                   </a>
                 </div>
                 <div class="hpdt_dtls hvr-sweep-to-top">
                   <div class="hp_name">
                     <p>Nike</p>
-                    <a href="#">Product Name</a>
+                    <a href="#">{{$new_val->product_name}}</a>
                   </div>
                   <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
+                    <span class="old-price"> QAR {{$new_val->product_old_price}} </span>
+                    <span class="price"> QAR {{$new_val->product_price}} </span>
                   </div>
                   <a class="add_crt_btn" href="#"></a>
+                  @if(isset($new_val->product_offer_price) && !empty($new_val->product_offer_price))
                   <div class="dis_price">50% Off</div>
+                  @endif
                 </div>
               </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="wish_active fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_7.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_3.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="wish_active fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_2.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_5.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_8.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="wish_active fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_7.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_3.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-              </div>
-
-              <div class="hpSlider_item">
-                <a href="#" class="wish_active fas fa-heart fav_btn"></a>
-                <div class="hpsl_thum">
-                  <a class="hpimgLink" href="#">
-                    <img src="{{'/assets/homecss/images/pm_2.png'}}">
-                  </a>
-                </div>
-                <div class="hpdt_dtls hvr-sweep-to-top">
-                  <div class="hp_name">
-                    <p>Brand</p>
-                    <a href="#">Product Name</a>
-                  </div>
-                  <div class="hslpricebx">
-                    <span class="old-price"> QAR 300 </span>
-                    <span class="price"> QAR 250 </span>
-                  </div>
-                  <a class="add_crt_btn" href="#"></a>
-                  <div class="dis_price">50% Off</div>
-                </div>
-
-
-              </div>
+              @endforeach
             </div>
-
+            @else
+            <h3>No Products are available..!</h3>
+            @endif
           </div>
           <div class="tab-pane fade" id="most-rating" role="tabpanel" aria-labelledby="most-rating-tab">
 

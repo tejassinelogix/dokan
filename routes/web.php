@@ -19,40 +19,40 @@ Auth::routes();
 
 /* user route management  */
 
- /* otp send  */
+/* otp send  */
 
 Route::post('/send_otp', 'Auth\RegisterController@send_otp');
 Route::post('/reset_password', 'Auth\RegisterController@reset_password');
 Route::post('/otp_verify', 'Auth\RegisterController@otp_verify');
- /* end here   */
+/* end here   */
 
 Route::get('/', 'HomeController@index');
 Route::get('/myaccount', 'MyaccountController@index');
 Route::PATCH('/myaccount/update/{id}', 'MyaccountController@update_profile');
 Route::get('/product_listing/{id}', 'ProductListingController@index');
- //Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
 
 /* end here  */
 
 /* Redirect user to login if they type only admin in url */
-Route::get('/admin', function() {
+Route::get('/admin', function () {
     return redirect()->to('admin/login');
 });
 
 
 /*  Admin Route Management  */
 
-Route::group(['prefix' => 'admin'], function() {
+Route::group(['prefix' => 'admin'], function () {
 
     // Login Routes...
     Route::get('login', ['as' => 'admin.login', 'uses' => 'AdminAuth\LoginController@showLoginForm']);
     Route::post('login', ['uses' => 'AdminAuth\LoginController@login']);
     Route::get('logout', ['as' => 'admin.logout', 'uses' => 'AdminAuth\LoginController@Adminlogout']);
-    
+
     // Registration Routes...
     Route::get('register', ['as' => 'admin.register', 'uses' => 'AdminAuth\RegisterController@showRegistrationForm']);
     Route::post('register', ['as' => 'admin.register.post', 'uses' => 'AdminAuth\RegisterController@register']);
-    
+
     // Password Reset Routes...
     Route::get('password/reset', ['as' => 'admin.password.reset', 'uses' => 'AdminAuth\ForgotPasswordController@showLinkRequestForm']);
     Route::post('password/email', ['as' => 'admin.password.email', 'uses' => 'AdminAuth\ForgotPasswordController@sendResetLinkEmail']);
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'admin'], function() {
 
 
     //product route added by kamlesh
-    
+
     Route::get('product', 'Admin\ProductController@index');
     Route::get('addproduct', 'Admin\ProductController@create');
     Route::get('bulk-edit', 'Admin\ProductController@bulk_edit');
@@ -74,7 +74,7 @@ Route::group(['prefix' => 'admin'], function() {
     //category route create by kamlesh
     Route::get('category', 'Admin\CategoryController@index');
     Route::get('addcategory', function () {
-    return view('admin/addcategory');
+        return view('admin/addcategory');
     });
 
     //usermanagement route create by kamlesh
@@ -87,7 +87,7 @@ Route::group(['prefix' => 'admin'], function() {
     //order route created by kamlesh
     Route::get('order', 'Admin\OrderController@index');
     Route::get('addorder', function () {
-    return view('admin/addorder');
+        return view('admin/addorder');
     });
     //Route::get('orderadd', 'Admin\OrderController@store');
 
@@ -139,64 +139,72 @@ Route::group(['prefix' => 'admin'], function() {
     //Client logo
     Route::get('client-logo', 'Admin\ClientlogoController@index');
     Route::get('addclientlogo', 'Admin\ClientlogoController@create');
+
+    //Brand Module
+    Route::get('add-brand', 'Admin\BrandController@getBrandPage');
+    Route::post('add-brand', 'Admin\BrandController@addBrand');
+    Route::get('show-brands', 'Admin\BrandController@showAllBrands');
+    Route::get('edit-brands/{id}', 'Admin\BrandController@showEditBrand');
+    Route::post('update-brand', 'Admin\BrandController@updateBrands');
+    Route::get('delete-brand/{id}', 'Admin\BrandController@deleteBrand');
 });
 //product module
- Route::post('admin/addproduct','Admin\ProductController@store');
- Route::get('admin/product/edit/{id}', 'Admin\ProductController@show');
- Route::PATCH('admin/product/update/{id}','Admin\ProductController@update');
- Route::delete('admin/product/delete/{id}','Admin\ProductController@destroy');
- Route::delete('admin/product/DeleteAll', 'Admin\ProductController@deleteAll');
- Route::delete('admin/product/bulkDelete', 'Admin\ProductController@bulkDelete');
- Route::post('admin/product/bulkupdate', 'Admin\ProductController@bulkupdate');
- Route::get('admin/product/new/{id}', 'Admin\ProductController@changenewarrial');
+Route::post('admin/addproduct', 'Admin\ProductController@store');
+Route::get('admin/product/edit/{id}', 'Admin\ProductController@show');
+Route::PATCH('admin/product/update/{id}', 'Admin\ProductController@update');
+Route::delete('admin/product/delete/{id}', 'Admin\ProductController@destroy');
+Route::delete('admin/product/DeleteAll', 'Admin\ProductController@deleteAll');
+Route::delete('admin/product/bulkDelete', 'Admin\ProductController@bulkDelete');
+Route::post('admin/product/bulkupdate', 'Admin\ProductController@bulkupdate');
+Route::get('admin/product/new/{id}', 'Admin\ProductController@changenewarrial');
 
- Route::post('image/upload/store','Admin\ProductController@imageuploadstore');
- Route::post('admin/delete','Admin\ProductController@deleteImage');
+Route::post('image/upload/store', 'Admin\ProductController@imageuploadstore');
+Route::post('admin/delete', 'Admin\ProductController@deleteImage');
 
- Route::post('admin/product/lowstock', 'Admin\ProductController@lowstock');
- 
- //business upload unlock
+Route::post('admin/product/lowstock', 'Admin\ProductController@lowstock');
+
+//business upload unlock
 Route::get('admin/business_upload/unlock/{id}', 'Admin\BusinessCategoryController@unlock');
 
- //category module
- Route::post('admin/addcategory','Admin\CategoryController@store');
- Route::get('admin/category/edit/{id}', 'Admin\CategoryController@show');
- Route::PATCH('admin/category/update/{id}','Admin\CategoryController@update');
- Route::delete('admin/category/delete/{id}','Admin\CategoryController@destroy');
- Route::any('admin/category_filter','Admin\CategoryController@filter');
- //Route::post('/export', 'PagesController@export');
- Route::any('admin/category/excelexport','Admin\CategoryController@excelexport');
- Route::any('admin/category/csvexport','Admin\CategoryController@csvexport');
+//category module
+Route::post('admin/addcategory', 'Admin\CategoryController@store');
+Route::get('admin/category/edit/{id}', 'Admin\CategoryController@show');
+Route::PATCH('admin/category/update/{id}', 'Admin\CategoryController@update');
+Route::delete('admin/category/delete/{id}', 'Admin\CategoryController@destroy');
+Route::any('admin/category_filter', 'Admin\CategoryController@filter');
+//Route::post('/export', 'PagesController@export');
+Route::any('admin/category/excelexport', 'Admin\CategoryController@excelexport');
+Route::any('admin/category/csvexport', 'Admin\CategoryController@csvexport');
 
- //UserManagemant module
- Route::post('admin/adduser','Admin\UsermanagementController@store');
- Route::get('admin/user/edit/{id}', 'Admin\UsermanagementController@show');
- Route::PATCH('admin/user/update/{id}','Admin\UsermanagementController@update');
- Route::any('admin/user_filter','Admin\UsermanagementController@filter');
- Route::delete('admin/user/delete/{id}','Admin\UsermanagementController@destroy');
+//UserManagemant module
+Route::post('admin/adduser', 'Admin\UsermanagementController@store');
+Route::get('admin/user/edit/{id}', 'Admin\UsermanagementController@show');
+Route::PATCH('admin/user/update/{id}', 'Admin\UsermanagementController@update');
+Route::any('admin/user_filter', 'Admin\UsermanagementController@filter');
+Route::delete('admin/user/delete/{id}', 'Admin\UsermanagementController@destroy');
 
- //admin vendor management
- Route::get('admin/vendor/active/{id}', 'Admin\VendorController@active');
- Route::get('admin/vendor/inactive/{id}', 'Admin\VendorController@inactive');
- Route::any('admin/vendor_filter','Admin\VendorController@filter');
- Route::get('admin/vendor/edit/{id}', 'Admin\VendorController@show');
- Route::PATCH('admin/vendor/update/{id}','Admin\VendorController@update');
+//admin vendor management
+Route::get('admin/vendor/active/{id}', 'Admin\VendorController@active');
+Route::get('admin/vendor/inactive/{id}', 'Admin\VendorController@inactive');
+Route::any('admin/vendor_filter', 'Admin\VendorController@filter');
+Route::get('admin/vendor/edit/{id}', 'Admin\VendorController@show');
+Route::PATCH('admin/vendor/update/{id}', 'Admin\VendorController@update');
 
- //admin notification
+//admin notification
 Route::get('admin/notification/read/{id}', 'Admin\NotificationController@read');
 Route::get('admin/notification/remove/{id}', 'Admin\NotificationController@remove');
 
 //business category 
 
-Route::post('admin/add_business_category','Admin\BusinessCategoryController@store');
+Route::post('admin/add_business_category', 'Admin\BusinessCategoryController@store');
 Route::get('admin/business_category/edit/{id}', 'Admin\BusinessCategoryController@show');
-Route::PATCH('admin/update_business_category/{id}','Admin\BusinessCategoryController@update');
+Route::PATCH('admin/update_business_category/{id}', 'Admin\BusinessCategoryController@update');
 
 //business Subcategory 
 
-Route::post('admin/add_business_subcategory','Admin\BusinessSubCategoryController@store');
+Route::post('admin/add_business_subcategory', 'Admin\BusinessSubCategoryController@store');
 Route::get('admin/business_subcategory/edit/{id}', 'Admin\BusinessSubCategoryController@show');
-Route::PATCH('admin/update_business_subcategory/{id}','Admin\BusinessSubCategoryController@update');
+Route::PATCH('admin/update_business_subcategory/{id}', 'Admin\BusinessSubCategoryController@update');
 
 //business upload verify
 
@@ -210,44 +218,44 @@ Route::post('admin/order/complete', 'Admin\OrderController@complete');
 //Add comission
 Route::post('admin/addcomission', 'Admin\ComissionManagementController@store');
 Route::get('admin/comission/edit/{id}', 'Admin\ComissionManagementController@show');
-Route::PATCH('admin/comission_update/{id}','Admin\ComissionManagementController@update');
+Route::PATCH('admin/comission_update/{id}', 'Admin\ComissionManagementController@update');
 
 //add attribute
 Route::post('admin/addattribute', 'Admin\AttributesController@store');
 Route::get('admin/attribute/edit/{id}', 'Admin\AttributesController@show');
-Route::PATCH('admin/attribute/update/{id}','Admin\AttributesController@update');
+Route::PATCH('admin/attribute/update/{id}', 'Admin\AttributesController@update');
 
 //add banner
 Route::post('admin/addbanner', 'Admin\HomebannerController@store');
-Route::get('admin/banner/edit/{id}','Admin\HomebannerController@show');
-Route::PATCH('admin/banner/update/{id}','Admin\HomebannerController@update');
+Route::get('admin/banner/edit/{id}', 'Admin\HomebannerController@show');
+Route::PATCH('admin/banner/update/{id}', 'Admin\HomebannerController@update');
 
 //add sub banner
 Route::post('admin/addsubbanner', 'Admin\HomebannerController@subbannerstore');
-Route::get('admin/subbanner/edit/{id}','Admin\HomebannerController@subbannershow');
-Route::PATCH('admin/subbanner/update/{id}','Admin\HomebannerController@subbannerupdate');
+Route::get('admin/subbanner/edit/{id}', 'Admin\HomebannerController@subbannershow');
+Route::PATCH('admin/subbanner/update/{id}', 'Admin\HomebannerController@subbannerupdate');
 
 //add blog section
 Route::post('admin/addblogsection', 'Admin\BlogsectionController@store');
-Route::get('admin/blogsection/edit/{id}','Admin\BlogsectionController@show');
-Route::PATCH('admin/blogsection/update/{id}','Admin\BlogsectionController@update');
+Route::get('admin/blogsection/edit/{id}', 'Admin\BlogsectionController@show');
+Route::PATCH('admin/blogsection/update/{id}', 'Admin\BlogsectionController@update');
 
 //add promo banner
 Route::post('admin/addpromo_banner', 'Admin\PromobannerController@store');
-Route::get('admin/promobanner/edit/{id}','Admin\PromobannerController@show');
-Route::PATCH('admin/promobanner/update/{id}','Admin\PromobannerController@update');
+Route::get('admin/promobanner/edit/{id}', 'Admin\PromobannerController@show');
+Route::PATCH('admin/promobanner/update/{id}', 'Admin\PromobannerController@update');
 
 //add Client logo
 Route::post('admin/addclientlogo', 'Admin\ClientlogoController@store');
-Route::get('admin/clientlogo/edit/{id}','Admin\ClientlogoController@show');
-Route::PATCH('admin/clientlogo/update/{id}','Admin\ClientlogoController@update');
+Route::get('admin/clientlogo/edit/{id}', 'Admin\ClientlogoController@show');
+Route::PATCH('admin/clientlogo/update/{id}', 'Admin\ClientlogoController@update');
 
 
- /*  Admin Route Management end here */
+/*  Admin Route Management end here */
 
- /*  Vendor Route Management  */
+/*  Vendor Route Management  */
 
-Route::group(['prefix' => 'vendor'], function() {
+Route::group(['prefix' => 'vendor'], function () {
 
     // Login Routes...
     Route::get('login', ['as' => 'vendor.login', 'uses' => 'VendorAuth\LoginController@showLoginForm']);
@@ -255,28 +263,28 @@ Route::group(['prefix' => 'vendor'], function() {
     Route::get('logout', ['as' => 'vendor.logout', 'uses' => 'VendorAuth\LoginController@Vendorlogout']);
 
 
-     // Route::view('register','vendor.register');
-      // Registration Routes...
+    // Route::view('register','vendor.register');
+    // Registration Routes...
     Route::get('register', ['as' => 'vendor.register', 'uses' => 'VendorAuth\RegisterController@showRegistrationForm']);
     Route::post('register', ['as' => 'vendor.register.post', 'uses' => 'VendorAuth\RegisterController@register']);
-    
-     //Route::view('login','vendor.login');
-     Route::view('/dashboard', 'vendor.home');
 
-     //vendor product add
-     Route::get('product', 'Vendor\ProductController@index');
-     Route::get('addproduct', 'Vendor\ProductController@create');
+    //Route::view('login','vendor.login');
+    Route::view('/dashboard', 'vendor.home');
+
+    //vendor product add
+    Route::get('product', 'Vendor\ProductController@index');
+    Route::get('addproduct', 'Vendor\ProductController@create');
 
 
-     // Forgot Password Functionality created by jignesh 
+    // Forgot Password Functionality created by jignesh 
     Route::get('verify-email/{email}', 'VendorAuth\RegisterController@showVerifyVendorMsg');
     Route::get('/reset/password', 'VendorAuth\RegisterController@showResetPasswordForm');
-    
+
     Route::post('/reset/password/email', 'VendorAuth\RegisterController@sendResetPasswordEmail');
     Route::get('password/reset/{token}', 'VendorAuth\RegisterController@showPasswordResetForm');
     Route::post('/reset/password', 'VendorAuth\RegisterController@resetPassword');
     // Forgot Password Functionality End
-    
+
     //vendor profile created by jignesh
     Route::get('/profile', 'Vendor\VendorController@getProfile');
     Route::post('/profile', 'Vendor\VendorController@updateProfile');
@@ -291,7 +299,7 @@ Route::group(['prefix' => 'vendor'], function() {
     //My Order
     Route::get('my_order', 'Vendor\MyOrderController@index');
 
-     //Payment
+    //Payment
     Route::get('payment', 'Vendor\PaymentController@index');
     Route::get('add_payment', 'Vendor\PaymentController@create');
 
@@ -304,26 +312,25 @@ Route::group(['prefix' => 'vendor'], function() {
     //update password
     Route::get('/change-password', 'Vendor\VendorController@getpassword');
     Route::post('/update-password', 'Vendor\VendorController@updatepassword');
-    
 });
 //Route::post('vendor/register', 'Vendor\VendorRegistor@store');
 //Route::post('vendor/login', 'Vendor\VendorRegistor@checklogin');
 
 //vendor product add
- Route::post('vendor/addproduct','Vendor\ProductController@store');
- Route::get('vendor/product/edit/{id}', 'Vendor\ProductController@show');
- Route::PATCH('vendor/product/update/{id}','Vendor\ProductController@update');
- Route::delete('vendor/product/delete/{id}','Vendor\ProductController@destroy');
- Route::delete('vendor/product/DeleteAll', 'Vendor\ProductController@deleteAll');
+Route::post('vendor/addproduct', 'Vendor\ProductController@store');
+Route::get('vendor/product/edit/{id}', 'Vendor\ProductController@show');
+Route::PATCH('vendor/product/update/{id}', 'Vendor\ProductController@update');
+Route::delete('vendor/product/delete/{id}', 'Vendor\ProductController@destroy');
+Route::delete('vendor/product/DeleteAll', 'Vendor\ProductController@deleteAll');
 
- Route::post('vendor/image/upload/store','Vendor\ProductController@imageuploadstore');
- Route::post('vendor/delete','Vendor\ProductController@deleteImage');
+Route::post('vendor/image/upload/store', 'Vendor\ProductController@imageuploadstore');
+Route::post('vendor/delete', 'Vendor\ProductController@deleteImage');
 
- //business upload 
+//business upload 
 
-Route::post('vendor/add_business_upload','Vendor\BusinessUploadController@store');
+Route::post('vendor/add_business_upload', 'Vendor\BusinessUploadController@store');
 Route::get('vendor/business_upload/edit/{id}', 'Vendor\BusinessUploadController@show');
-Route::PATCH('vendor/update_business_upload/{id}','Vendor\BusinessUploadController@update');
+Route::PATCH('vendor/update_business_upload/{id}', 'Vendor\BusinessUploadController@update');
 
 //order request
 Route::get('vendor/order_request/view/{id}', 'Vendor\RequestOrderController@show');
@@ -337,9 +344,9 @@ Route::post('vendor/order/readytopickup', 'Vendor\MyOrderController@readytopicku
 //Payment
 Route::post('vendor/add_bank', 'Vendor\PaymentController@store');
 Route::get('vendor/bank/edit/{id}', 'Vendor\PaymentController@show');
-Route::PATCH('vendor/bank/{id}','Vendor\PaymentController@update');
+Route::PATCH('vendor/bank/{id}', 'Vendor\PaymentController@update');
 
- //vendor notification
+//vendor notification
 Route::get('vendor/notification/read/{id}', 'Vendor\NotificationController@read');
 Route::get('vendor/notification/remove/{id}', 'Vendor\NotificationController@remove');
 
