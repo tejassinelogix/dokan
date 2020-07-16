@@ -554,7 +554,14 @@
                 </div>
                 <div class="hpdt_dtls hvr-sweep-to-top">
                   <div class="hp_name">
-                    <p>Nike</p>
+                    <?php
+                    $decode_brand = json_decode($new_val->brand_name);
+                    $brand_name = "Brand";
+                    if (isset($decode_brand) && !empty($decode_brand)) {
+                      $brand_name = $decode_brand->en;
+                    }
+                    ?>
+                    <p>{{ $brand_name }}</p>
                     <a href="#">{{$new_val->product_name}}</a>
                   </div>
                   <div class="hslpricebx">

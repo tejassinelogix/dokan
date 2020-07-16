@@ -3,11 +3,12 @@
 @include('admin.include.top')
 <style type="text/css">
    ul.pagination {
-    margin-left: 10px;
-    padding-top: 7px;
-    letter-spacing: 12px;
-}
+      margin-left: 10px;
+      padding-top: 7px;
+      letter-spacing: 12px;
+   }
 </style>
+
 <body>
    <div class="main-content" id="panel">
       <!-- Topnav -->
@@ -25,17 +26,17 @@
                            <i class="fa fa-sitemap"></i> Manage Brands
                            <div class="btn-group ml-2" style="vertical-align: text-top">
                               <a class="btn btn-outline-secondary btn-sm tooltip-toggle active" style="cursor:default" href="javascript:void(0)" data-original-title="" title="">
-                              <i class="fa fa-bars"></i>
+                                 <i class="fa fa-bars"></i>
                               </a>
                               <a class="btn btn-outline-secondary btn-sm tooltip-toggle" href="" title="" data-original-title="switch to tree view">
-                              <i class="fa fa-sitemap"></i>
+                                 <i class="fa fa-sitemap"></i>
                               </a>
                            </div>
                         </div>
                         <div class="options col-md-4 d-flex justify-content-end">
                            <a href="{{ url('admin/add-brand')}}" class="btn btn-primary">
-                           <i class="fa fa-plus"></i>
-                           <span>Add new</span>
+                              <i class="fa fa-plus"></i>
+                              <span>Add new</span>
                            </a>
                            <!--<div class="btn-group">-->
                            <!--   <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
@@ -64,10 +65,10 @@
                         </div>
                      </div>
                      @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-block" style="background-color:cornflowerblue;border-color: cornflowerblue;">
-                           <button type="button" class="close" data-dismiss="alert">×</button>  
-                                <strong>{{ $message }}</strong>
-                        </div>
+                     <div class="alert alert-success alert-block" style="background-color:cornflowerblue;border-color: cornflowerblue;">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{ $message }}</strong>
+                     </div>
                      @endif
                      <div class="cus_dashboard">
                         <!--<form action="{{ url('/admin/category_filter')}}" method="post" >-->
@@ -85,17 +86,17 @@
                         <!--      </div>-->
                         <!--      <input class="form-control" id="SearchAlias" name="alias" type="text" value="">-->
                         <!--   </div>-->
-                           <!--<div class="col-sm-6 col-lg-4 col-xl-3 form-group">-->
-                           <!--   <div class="ctl-label">-->
-                           <!--      <label for="SearchStoreId">Store</label><a class="hint" href="#" onclick="return false;" tabindex="-1" title="Search by a specific store." data-toggle="tooltip" data-placement="left"><i class="fa fa-question-circle"></i></a>-->
-                           <!--   </div>-->
-                           <!--   <select class="form-control select2-hidden-accessible" data-val="true" data-val-number="The field 'Store' must be a number." id="SearchStoreId" name="SearchStoreId" tabindex="-1" aria-hidden="true">-->
-                           <!--      <option value="">All</option>-->
-                           <!--      <option value="1">Demo Shop</option>-->
-                           <!--      <option value="2">Demo-Shop 2</option>-->
-                           <!--   </select>-->
-                           <!--   <i class="fas fa-caret-down sel_dwn"></i>-->
-                           <!--</div>-->
+                        <!--<div class="col-sm-6 col-lg-4 col-xl-3 form-group">-->
+                        <!--   <div class="ctl-label">-->
+                        <!--      <label for="SearchStoreId">Store</label><a class="hint" href="#" onclick="return false;" tabindex="-1" title="Search by a specific store." data-toggle="tooltip" data-placement="left"><i class="fa fa-question-circle"></i></a>-->
+                        <!--   </div>-->
+                        <!--   <select class="form-control select2-hidden-accessible" data-val="true" data-val-number="The field 'Store' must be a number." id="SearchStoreId" name="SearchStoreId" tabindex="-1" aria-hidden="true">-->
+                        <!--      <option value="">All</option>-->
+                        <!--      <option value="1">Demo Shop</option>-->
+                        <!--      <option value="2">Demo-Shop 2</option>-->
+                        <!--   </select>-->
+                        <!--   <i class="fas fa-caret-down sel_dwn"></i>-->
+                        <!--</div>-->
                         <!--   <div class="col-sm-6 col-lg-4 col-xl-3 form-group">-->
                         <!--      <div class="ctl-label">-->
                         <!--         <label>&nbsp;</label>-->
@@ -115,7 +116,7 @@
                                           <ul class="pagination">
                                              <li class="page-item reld">
                                                 <a class="page-link" href="#">
-                                                <i class="fas fa-sync"></i>                                        
+                                                   <i class="fas fa-sync"></i>
                                                 </a>
                                              </li>
                                              {{ $brands->links() }}
@@ -141,7 +142,9 @@
                                           @foreach($brands as $row)
                                           <tr>
                                              <td>{{ $row->name }}</td>
-                                             <td><div class="zoomable-thumb-container"><img src="{{ URL::to('/auraqatar/public/') }}/brand_images/{{ $row->image }}" style="position: relative;"></div></td>
+                                             <td>
+                                                <div class="zoomable-thumb-container"><img src="{{ asset('../brand_images/'.$row->image) }}" style="position: relative;"></div>
+                                             </td>
                                              @if($row->status == '1')
                                              <td>Active</td>
                                              @else
@@ -159,7 +162,7 @@
                                           <ul class="pagination">
                                              <li class="page-item reld">
                                                 <a class="page-link" href="#">
-                                                <i class="fas fa-sync"></i>                                        
+                                                   <i class="fas fa-sync"></i>
                                                 </a>
                                              </li>
                                              <!-- <li class="page-item">
@@ -168,9 +171,9 @@
                                                 <span class="sr-only">Previous</span>
                                                 </a>
                                              </li> -->
-                                              
-                                              {{ $brands->links() }}
-                                             
+
+                                             {{ $brands->links() }}
+
                                           </ul>
                                        </nav>
                                     </div>
@@ -186,29 +189,27 @@
                </div>
             </div>
          </div>
-          @include('admin.include.footer')
+         @include('admin.include.footer')
       </div>
    </div>
    @include('admin.include.bottom')
    <script>
-       $(document).ready(function(){
-           $(document).on('click', '#delete-brand', function(){
-               var brand_id = $(this).attr('data-id');
-               if(confirm("Are you sure you want to delete this brand?")){
-                    $.ajax({
-                        url:'/admin/delete-brand/' + brand_id,
-                        method:'GET',
-                        success: function(resp)
-                        {
-                            if(resp.status == "true")
-                            {
-                                window.location.href = '/admin/show-brands';
-                            }
-                        }
-                    })   
-               }
-           })
-       })
+      $(document).ready(function() {
+         $(document).on('click', '#delete-brand', function() {
+            var brand_id = $(this).attr('data-id');
+            if (confirm("Are you sure you want to delete this brand?")) {
+               $.ajax({
+                  url: '/admin/delete-brand/' + brand_id,
+                  method: 'GET',
+                  success: function(resp) {
+                     if (resp.status == "true") {
+                        window.location.href = '/admin/show-brands';
+                     }
+                  }
+               })
+            }
+         })
+      })
    </script>
 </body>
 @endsection

@@ -33,7 +33,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $new_arrival = Product::where('new_arrival', '1')->paginate(50);
+        $new_arrival = (new Product())->list_belongsTo();
+        // dd($new_arrival);
         $data = category::latest()->paginate(50);
         $banner = Homebanner::latest()->paginate(50);
         $subbanner = Subbanner::latest()->orderBy('id', 'desc')->paginate(50);

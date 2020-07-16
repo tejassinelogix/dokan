@@ -62,12 +62,20 @@ class BrandController extends Controller
 
     public function updateBrands(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'brand_name_en' => 'required',
-            'brand_name_er' => 'required',
-            'brand_image' => 'required|mimes:jpeg,png,jpg|max:2048',
-            //'status' =>'accepted'
-        ]);
+        if ($request->hasFile('brand_image')) {
+            $validator = Validator::make($request->all(), [
+                'brand_name_en' => 'required',
+                'brand_name_er' => 'required',
+                'brand_image' => 'required|mimes:jpeg,png,jpg|max:2048',
+                //'status' =>'accepted'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'brand_name_en' => 'required',
+                'brand_name_er' => 'required'
+            ]);
+        }
+
         $url = "/admin/edit-brands/" . $request->unique_id;
         if ($validator->fails()) {
             return redirect($url)

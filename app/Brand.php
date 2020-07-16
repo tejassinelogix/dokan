@@ -13,4 +13,15 @@ class Brand extends Model
     protected $fillable = [
         'name', 'image', 'status'
     ];
+
+    /*
+    @author    :: Tejas
+    @task_id   :: brand to product relationship
+    @task_desc :: 
+    @params    :: 
+   */
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
+    }
 }

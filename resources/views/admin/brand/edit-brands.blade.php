@@ -118,6 +118,7 @@
                                                                               <font style="vertical-align: inherit;">Upload a file</font>
                                                                            </span>
                                                                            <input type="file" name="brand_image" id="brand_image">
+                                                                           <input type="hidden" class="form-control" id="brand_image_hidden" name="filename_hidden" value="{{ (is_array(old()) && !empty(old('brand_image')))? old('brand_image') : $brands->image }}">
                                                                         </span>
                                                                      </div>
                                                                   </div>
