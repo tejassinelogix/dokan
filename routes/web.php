@@ -312,6 +312,14 @@ Route::group(['prefix' => 'vendor'], function () {
     //update password
     Route::get('/change-password', 'Vendor\VendorController@getpassword');
     Route::post('/update-password', 'Vendor\VendorController@updatepassword');
+
+    //Brand Module
+    Route::get('add-brand', 'Vendor\BrandController@getBrandPage');
+    Route::post('add-brand', 'Vendor\BrandController@addBrand');
+    Route::get('show-brands', 'Vendor\BrandController@showAllBrands');
+    Route::get('edit-brands/{id}', 'Vendor\BrandController@showEditBrand');
+    Route::post('update-brand', 'Vendor\BrandController@updateBrands');
+    Route::get('delete-brand/{id}', 'Vendor\BrandController@deleteBrand');
 });
 //Route::post('vendor/register', 'Vendor\VendorRegistor@store');
 //Route::post('vendor/login', 'Vendor\VendorRegistor@checklogin');

@@ -8,7 +8,7 @@ use Spatie\Translatable\HasTranslations;
 class Product extends Model
 {
     use HasTranslations;
-    public $translatable = ['product_name', 'product_short_description', 'product_full_discription'];
+    public $translatable = ['product_name', 'brand_name', 'product_short_description', 'product_full_discription'];
 
     protected $fillable = [
         'product_name', 'product_price', 'product_qty', 'product_old_price', 'similar_product', 'product_size', 'product_offer_price', 'featured_images', 'from_date', 'to_date', 'product_short_description', 'product_full_discription', 'product_brand', 'product_images', 'product_sku', 'product_categories', 'background_color', 'product_brand', 'product_status', 'created_by', 'created_by_name'

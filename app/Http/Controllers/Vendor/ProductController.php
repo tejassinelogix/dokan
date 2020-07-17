@@ -11,6 +11,7 @@ use App\category;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
+use App\Brand;
 
 class ProductController extends Controller
 {
@@ -28,11 +29,10 @@ class ProductController extends Controller
 
         // return view('vendor/listproducts', compact('data'))->with('i', (request()->input('page', 1) - 1) * 5);
 
-         $vendor_id=Auth::guard('vendor')->user()->id;
-        
-        $data = Product::where('created_by',$vendor_id)->paginate(2);
+        $vendor_id = Auth::guard('vendor')->user()->id;
+
+        $data = Product::where('created_by', $vendor_id)->paginate(2);
         return view('vendor/listproducts', compact('data'))->with('i', (request()->input('page', 1) - 1) * 5);
-        
     }
 
 
@@ -43,12 +43,15 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $vendor_id=Auth::guard('vendor')->user()->id;
-        $attr = Attributes::whereRaw("FIND_IN_SET('$vendor_id',assign_to)")->where('show_pro_page',
-            '1')->get();
+        $vendor_id = Auth::guard('vendor')->user()->id;
+        $attr = Attributes::whereRaw("FIND_IN_SET('$vendor_id',assign_to)")->where(
+            'show_pro_page',
+            '1'
+        )->get();
         $product = Product::all();
         $data = category::all();
-        return view('vendor/product', compact('data','attr','product'));
+        $brands = Brand::all();
+        return view('vendor/product', compact('data', 'attr', 'product', 'brands'));
     }
 
     /**
@@ -59,70 +62,61 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $created_by= Auth::guard('vendor')->user()->id;
+        $created_by = Auth::guard('vendor')->user()->id;
         //echo $created_by;die;
         $vendors = DB::table('vendors')->where('id', '=', $created_by)->get();
-        $created_by_name=$vendors[0]->name;
-        
+        $created_by_name = $vendors[0]->name;
+
 
         $image = $request->file('featured_images');
         $featured_images = rand() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('product_images'), $featured_images);
 
-        $data=[];
+        $data = [];
 
         $uploaded_images = DB::table('image_uploads')->get();
 
-        foreach($uploaded_images as $file)
-        {  
-            $data[] = $file->filename;  
+        foreach ($uploaded_images as $file) {
+            $data[] = $file->filename;
         }
 
-        $cat=[];
+        $cat = [];
 
-        if ($cate = $request->input('product_categories'))
-        {
-                foreach($cate as $ca)
-                {
-                  $cat[] = $ca;
-                }
+        if ($cate = $request->input('product_categories')) {
+            foreach ($cate as $ca) {
+                $cat[] = $ca;
+            }
         }
 
-        $similar_product=[];
+        $similar_product = [];
 
-        if ($sim_pro = $request->input('similar_product'))
-        {
+        if ($sim_pro = $request->input('similar_product')) {
             //dd($cate);
-                foreach($sim_pro as $ca)
-                {
-                  $similar_product[] = $ca;
-                }
+            foreach ($sim_pro as $ca) {
+                $similar_product[] = $ca;
+            }
         }
 
 
-        $new_array=[];
-        if ($attr = $request->input('product_attribute'))
-        {
-                $attr_name = $request->input('att_name');
-                $new_array = [];
-                foreach($attr_name as $attr_key => $attr_val)
-                {
-                    $new_array[$attr_val] = $attr[$attr_key];
-
-                } 
-
+        $new_array = [];
+        if ($attr = $request->input('product_attribute')) {
+            $attr_name = $request->input('att_name');
+            $new_array = [];
+            foreach ($attr_name as $attr_key => $attr_val) {
+                $new_array[$attr_val] = $attr[$attr_key];
+            }
         }
 
         //dd(json_encode($new_array));
 
         $product = new Product; // This is an Eloquent model
         $product
-           ->setTranslation('product_name', 'en', $request->product_name_en)
-           ->setTranslation('product_name', 'ar', $request->product_name_ar)
-           ->setTranslation('product_short_description', 'en', $request->product_short_dis_en)
-           ->setTranslation('product_short_description', 'ar', $request->product_short_dis_ar)
-           ->setTranslation('product_full_discription', 'en', $request->product_full_dis_en)
-           ->setTranslation('product_full_discription', 'ar', $request->product_full_dis_ar);
+            ->setTranslation('product_name', 'en', $request->product_name_en)
+            ->setTranslation('product_name', 'ar', $request->product_name_ar)
+            ->setTranslation('product_short_description', 'en', $request->product_short_dis_en)
+            ->setTranslation('product_short_description', 'ar', $request->product_short_dis_ar)
+            ->setTranslation('product_full_discription', 'en', $request->product_full_dis_en)
+            ->setTranslation('product_full_discription', 'ar', $request->product_full_dis_ar);
         $product->product_price = $request->get('product_price');
         $product->product_offer_price = $request->get('product_offer_price');
         $product->product_qty = $request->get('product_qty');
@@ -139,10 +133,10 @@ class ProductController extends Controller
         $product->created_by = $created_by;
         $product->created_by_name = $created_by_name;
         $product->product_images = implode(",", $data);
-
+        $product->product_brand = $request->product_brand;
         $product->save();
 
-        $get_id=$product->id;
+        $get_id = $product->id;
 
         // $form_data = array(
         //     'product_name'          =>   $request->product_name,
@@ -158,11 +152,11 @@ class ProductController extends Controller
 
         //$product=Product::create($form_data);
 
-        DB::table('image_uploads')->truncate(); 
+        DB::table('image_uploads')->truncate();
 
         $vendor_data = array(
             'vendor_id'     =>   $created_by,
-            'not_msg'       =>   'New product created by vendor name '.$created_by_name.' and waiting for admin approval!!',
+            'not_msg'       =>   'New product created by vendor name ' . $created_by_name . ' and waiting for admin approval!!',
             'product_id'    => $get_id,
             'not_status'    =>   '0',
         );
@@ -176,21 +170,20 @@ class ProductController extends Controller
     {
         $image = $request->file('file');
         $imageName = $image->getClientOriginalName();
-        $image->move(public_path('product_images'),$imageName);
+        $image->move(public_path('product_images'), $imageName);
         $data  =   ImageUpload::create(['filename' => $imageName]);
         return response()->json(["status" => "success", "data" => $data]);
-
     }
 
     public function deleteImage(Request $request)
     {
         $filename =  $request->get('filename');
-        ImageUpload::where('filename',$filename)->delete();
-        $path=public_path().'/product_images/'.$filename;
+        ImageUpload::where('filename', $filename)->delete();
+        $path = public_path() . '/product_images/' . $filename;
         if (file_exists($path)) {
             unlink($path);
         }
-        return $filename;  
+        return $filename;
     }
 
     /**
@@ -203,11 +196,15 @@ class ProductController extends Controller
     {
         $data = category::all();
         $product = Product::find($id);
-        $vendor_id=Auth::guard('vendor')->user()->id;
-        $attr = Attributes::whereRaw("FIND_IN_SET('$vendor_id',assign_to)")->where('show_pro_page',
-            '1')->get();
+        $vendor_id = Auth::guard('vendor')->user()->id;
+        $attr = Attributes::whereRaw("FIND_IN_SET('$vendor_id',assign_to)")->where(
+            'show_pro_page',
+            '1'
+        )->get();
         $similar_product = Product::all();
-        return view('vendor/product_update', compact('product','data','attr','similar_product'));
+        $brands = Brand::all();
+        $selected_brand = \App\Brand::where('id', $product->product_brand)->first();
+        return view('vendor/product_update', compact('product', 'brands', 'selected_brand', 'data', 'attr', 'similar_product'));
     }
 
     /**
@@ -219,9 +216,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $data = category::all();
-        
+
         $product = Product::find($id);
-        return view('vendor/product_update', compact('product','data'));
+        return view('vendor/product_update', compact('product', 'data'));
     }
 
     /**
@@ -235,22 +232,22 @@ class ProductController extends Controller
     {
 
         $product = Product::find($id);
-        $created_by= Auth::guard('vendor')->user()->id;
+        $created_by = Auth::guard('vendor')->user()->id;
         $vendors = DB::table('vendors')->where('id', '=', $created_by)->get();
-        $created_by_name=$vendors[0]->name;
+        $created_by_name = $vendors[0]->name;
         // $image = $request->file('product_images');
 
         // $new_name = rand() . '.' . $image->getClientOriginalExtension();
         // $image->move(public_path('product_images'), $new_name);
 
         //$product->product_name =  $request->get('product_name');
-         $product
-           ->setTranslation('product_name', 'en', $request->product_name_en)
-           ->setTranslation('product_name', 'ar', $request->product_name_ar)
-           ->setTranslation('product_short_description', 'en', $request->product_short_dis_en)
-           ->setTranslation('product_short_description', 'ar', $request->product_short_dis_ar)
-           ->setTranslation('product_full_discription', 'en', $request->product_full_dis_en)
-           ->setTranslation('product_full_discription', 'ar', $request->product_full_dis_ar);
+        $product
+            ->setTranslation('product_name', 'en', $request->product_name_en)
+            ->setTranslation('product_name', 'ar', $request->product_name_ar)
+            ->setTranslation('product_short_description', 'en', $request->product_short_dis_en)
+            ->setTranslation('product_short_description', 'ar', $request->product_short_dis_ar)
+            ->setTranslation('product_full_discription', 'en', $request->product_full_dis_en)
+            ->setTranslation('product_full_discription', 'ar', $request->product_full_dis_ar);
         $product->product_price = $request->get('product_price');
         $product->product_offer_price = $request->get('product_offer_price');
         $product->product_old_price = $request->get('product_old_price');
@@ -264,7 +261,8 @@ class ProductController extends Controller
         $product->new_arrival = '0';
         $product->created_by = $created_by;
         $product->created_by_name = $created_by_name;
-        
+        $product->product_brand = $request->product_brand;
+
         // if($request->hasFile('product_images')){
         //     $image = $request->file('product_images');
         //     $new_name = rand() . '.' . $image->getClientOriginalExtension();
@@ -272,74 +270,64 @@ class ProductController extends Controller
         //     $product->product_images = $new_name;
         // }
 
-        $cat=[];
+        $cat = [];
 
-        if($cate = $request->input('product_categories'))
-        {
+        if ($cate = $request->input('product_categories')) {
             //dd($cate);
-                foreach($cate as $ca)
-                {
-                  $cat[] = $ca;
-                }
-                $product->product_categories = implode(",", $cat);
+            foreach ($cate as $ca) {
+                $cat[] = $ca;
+            }
+            $product->product_categories = implode(",", $cat);
         }
 
-        $similar_product=[];
+        $similar_product = [];
 
-        if ($sim_pro = $request->input('similar_product'))
-        {
-                foreach($sim_pro as $ca)
-                {
-                  $similar_product[] = $ca;
-                }
-                $product->similar_product = implode(",", $similar_product);
+        if ($sim_pro = $request->input('similar_product')) {
+            foreach ($sim_pro as $ca) {
+                $similar_product[] = $ca;
+            }
+            $product->similar_product = implode(",", $similar_product);
         }
 
 
-        $new_array=[];
-        if ($attr = $request->input('product_attribute'))
-        {
-                $attr_name = $request->input('att_name');
-                $new_array = [];
-                foreach($attr_name as $attr_key => $attr_val)
-                {
-                    $new_array[$attr_val] = $attr[$attr_key];
-
-                } 
-                $product->product_size = json_encode($new_array);
+        $new_array = [];
+        if ($attr = $request->input('product_attribute')) {
+            $attr_name = $request->input('att_name');
+            $new_array = [];
+            foreach ($attr_name as $attr_key => $attr_val) {
+                $new_array[$attr_val] = $attr[$attr_key];
+            }
+            $product->product_size = json_encode($new_array);
         }
 
 
 
         $uploaded_images = DB::table('image_uploads')->get()->toArray();
-        $data=[];
-        if($uploaded_images !=null)
-        {
-            foreach($uploaded_images as $file)
-            {  
-                $data[] = $file->filename;  
+        $data = [];
+        if ($uploaded_images != null) {
+            foreach ($uploaded_images as $file) {
+                $data[] = $file->filename;
             }
             $product->product_images = implode(",", $data);
         }
 
-        if($request->hasFile('featured_images')){
+        if ($request->hasFile('featured_images')) {
             $image = $request->file('featured_images');
             $featured_images = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('product_images'), $featured_images);
             $product->featured_images = $featured_images;
         }
-  
-        if($product->reason_for_disapprove !='')
-        {
-          //echo $id;die;
-          $vendor_data = array(
-              'vendor_id'     =>   $created_by,
-              'not_msg'       =>   'Disapprove Product Updated By Vendor  '.$created_by_name.' and waiting for admin approval!!',
-              'product_id'    => $id,
-              'not_status'    =>   '0',
-          );
 
-          Notification::create($vendor_data);
+        if ($product->reason_for_disapprove != '') {
+            //echo $id;die;
+            $vendor_data = array(
+                'vendor_id'     =>   $created_by,
+                'not_msg'       =>   'Disapprove Product Updated By Vendor  ' . $created_by_name . ' and waiting for admin approval!!',
+                'product_id'    => $id,
+                'not_status'    =>   '0',
+            );
+
+            Notification::create($vendor_data);
         }
 
 
@@ -348,12 +336,13 @@ class ProductController extends Controller
         DB::table('image_uploads')->truncate();
 
         return redirect('/vendor/product')->with('success', 'Product updated!');
-
     }
 
     public function bulkupdate(Request $request)
     {
-        echo "<pre>";print_r($request);die;
+        echo "<pre>";
+        print_r($request);
+        die;
     }
 
     /**
@@ -364,7 +353,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        
+
         $product = Product::findOrFail($id);
         $product->delete();
         return redirect('/vendor/product')->with('success', 'Product deleted successfully');
@@ -373,14 +362,14 @@ class ProductController extends Controller
     public function deleteAll(Request $request)
     {
         $ids = $request->ids;
-        DB::table("products")->whereIn('id',explode(",",$ids))->delete();
-        return response()->json(['success'=>"Products Deleted successfully."]);
+        DB::table("products")->whereIn('id', explode(",", $ids))->delete();
+        return response()->json(['success' => "Products Deleted successfully."]);
     }
 
     public function bulkDelete(Request $request)
     {
         $ids = $request->ids;
-        DB::table("products")->whereIn('id',explode(",",$ids))->delete();
-        return response()->json(['success'=>"Products Deleted successfully."]);
+        DB::table("products")->whereIn('id', explode(",", $ids))->delete();
+        return response()->json(['success' => "Products Deleted successfully."]);
     }
 }

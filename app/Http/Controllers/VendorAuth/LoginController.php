@@ -42,52 +42,42 @@ class LoginController extends Controller
     }*/
 
     protected function guard()
-	{
-		return auth()->guard('vendor');
-	}
-    
-      function login(Request $request)
     {
-         $this->validate($request, [
-          'email'   => 'required|email',
-          'password'  => 'required|alphaNum|min:3'
-         ]);
+        return auth()->guard('vendor');
+    }
+
+    function login(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password'  => 'required|alphaNum|min:3'
+        ]);
 
         $model = Vendor::where('email', $request->email)->first();
-        if(empty($model))
-        {
-          return redirect('vendor/login')->with('error', 'Wrong Login Details');
-        }
-        if (Hash::check($request->password, $model->password, [])) {
-            if($model->vendor_status=='1')
-            {
-                if (Auth::guard('vendor')->attempt(['email' => $request->email, 'password' => $request->password])) {
-                    return redirect('vendor/dashboard');
-                }
-                else
-                {
-                  return redirect('vendor/login')->with('error', 'Your account is not activated yet please contact to administrator.');   
-                }
-                
-            }
-            else
-            {
-                return redirect('vendor/login')->with('error', 'Your account is not verified.');
-            }
-        }
-        else
-        {
+        if (empty($model)) {
             return redirect('vendor/login')->with('error', 'Wrong Login Details');
         }
-
+        if (Hash::check($request->password, $model->password, [])) {
+            if ($model->vendor_status == '1') {
+                if (Auth::guard('vendor')->attempt(['email' => $request->email, 'password' => $request->password])) {
+                    return redirect('vendor/dashboard');
+                } else {
+                    return redirect('vendor/login')->with('error', 'Your account is not activated yet please contact to administrator.');
+                }
+            } else {
+                return redirect('vendor/login')->with('error', 'Your account is not verified.');
+            }
+        } else {
+            return redirect('vendor/login')->with('error', 'Wrong Login Details');
+        }
     }
-	
-	public function showLoginForm()
-	{
-		return view('vendor.login');
-	}
-	
-	public function Vendorlogout(Request $request)
+
+    public function showLoginForm()
+    {
+        return view('vendor.login');
+    }
+
+    public function Vendorlogout(Request $request)
     {
         //echo "test";die;
         $this->guard()->logout();

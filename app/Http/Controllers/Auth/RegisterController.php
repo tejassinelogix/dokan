@@ -84,7 +84,6 @@ class RegisterController extends Controller
     {
         $validation = $this->validator($request->all());
 
-
         if ($validation->fails()) {
             //return response()->json($validation->errors()->toArray());
             return Response::json(['errors' => $validation->errors()]);
