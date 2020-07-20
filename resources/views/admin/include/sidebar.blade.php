@@ -47,12 +47,12 @@
                   categories
                 </a>
               </li>
-              <li data-id="categories-list">
+              {{-- <li data-id="categories-list">
                 <a class="dropdown-item" href="{{ url('/admin/business_upload')}}">
                   <i class="fa-fw fa fa-sitemap"></i>
                   Business Upload
                 </a>
-              </li>
+              </li> --}}
               <!-- <li data-id="categories-list">
                       <a class="dropdown-item" href="{{ url('/admin/business_subcategory')}}">
                         <i class="fa-fw fa fa-cube"></i>
@@ -98,10 +98,10 @@
               <li data-id="reviews">
                 <a class="dropdown-item" href="{{ url('/admin/blog-section')}}">
                   <i class="fa-fw far fa-list-alt"></i>
-                  Blog Section
+                  Block Section
                 </a>
               </li>
-              <li data-id="manufacturers">
+              {{-- <li data-id="manufacturers">
                 <a class="dropdown-item" href="manufacturer-list.html">
                   <i class="fa-fw far fa-building"></i>
                   Manufacturers
@@ -112,7 +112,7 @@
                   <i class="fa-fw fa fa-tags"></i>
                   Product tags
                 </a>
-              </li>
+              </li> --}}
               <li data-id="stockreport">
                 <a class="dropdown-item" href="#">
                   <i class="fa-fw fa fa-sort-numeric-down"></i>
@@ -159,7 +159,7 @@
                   Comission Management
                 </a>
               </li>
-              <li data-id="shipments">
+              {{-- <li data-id="shipments">
                 <a class="dropdown-item" href="#">
                   <i class="fa-fw fa fa-truck-moving fa-flip-horizontal"></i>
                   Shipments
@@ -208,7 +208,7 @@
                   <i class="fa-fw far fa-thumbs-down"></i>
                   Products never purchased
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
           <li data-id="nav-users" class="nav-item dropdown">
@@ -229,7 +229,7 @@
                   Customer roles
                 </a>
               </li>
-              <li data-id="online-customers">
+              {{-- <li data-id="online-customers">
                 <a class="dropdown-item" href="#">
                   <i class="fa-fw fa fa-sign-in-alt"></i>
                   Online customers
@@ -253,7 +253,7 @@
                   <i class="fa-fw far fa-eye"></i>
                   Activity Log
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
           <li data-id="nav-promotions" class="nav-item dropdown">
@@ -286,7 +286,7 @@
                   Client Logo
                 </a>
               </li>
-              <li data-id="discounts">
+              {{-- <li data-id="discounts">
                 <a class="dropdown-item" href="#">
                   <i class="fa-fw fa fa-signal fa-flip-horizontal"></i>
                   Discounts
@@ -309,10 +309,10 @@
                   <i class="fa-fw fa fa-bullhorn"></i>
                   Campaigns
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
-          <li data-id="nav-cms" class="nav-item dropdown">
+          {{-- <li data-id="nav-cms" class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown">
               <i class="text-white fa fa-code-branch navbar-icon"></i>
               <span class="navbar-label">CMS</span>
@@ -690,7 +690,7 @@
                   Manage plugins
                 </a>
               </li>
-            </ul>
+            </ul> --}}
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown">
@@ -715,7 +715,7 @@
                           </a>
                       </li> -->
 
-              <li data-id="8475916641">
+              {{-- <li data-id="8475916641">
                 <a class="dropdown-item" href="">
                   <i class="fa-fw far fa-paper-plane"></i> Clickatell SMS Provider
                 </a>
@@ -735,7 +735,7 @@
                 <a class="dropdown-item" href="#">
                   <i class="fa-fw fa fa-puzzle-piece"></i> Manage plugins
                 </a>
-              </li>
+              </li> --}}
             </ul>
           </li>
         </ul>
@@ -763,7 +763,7 @@
 
           <!--  end here  -->
 
-          <li class="nav-item dropdown" title="Actions">
+          {{-- <li class="nav-item dropdown" title="Actions">
             <a class="nav-link dropdown-toggle navbar-tool" href="javascript:void(0)" data-toggle="dropdown">
               <i class="text-white fa fa-cog navbar-icon"></i>
             </a>
@@ -791,7 +791,7 @@
                 Restart application
               </a>
             </div>
-          </li>
+          </li> --}}
 
 
           <!-- <li id="navtool-help"  title="Help" class="nav-item dropdown d-md-block">
