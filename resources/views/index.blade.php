@@ -544,12 +544,14 @@
           <div class="tab-pane fade" id="new-arrivals" role="tabpanel" aria-labelledby="new-arrivals-tab">
             @if(isset($new_arrival) && !empty($new_arrival))
             <div class="owl-carousel pdt_slider new_arrivals">
+                
               @foreach ($new_arrival as $new_key => $new_val)
+              
               <div class="hpSlider_item">
                 <a href="#" class="fas fa-heart fav_btn"></a>
                 <div class="hpsl_thum">
                   <a class="hpimgLink" href="#">
-                    <img src="{{ asset('../product_images/'.$new_val->featured_images)}}">
+                    <img src="{{ URL::to('/dokan/public') }}/product_images/{{ $new_val->featured_images }}">
                   </a>
                 </div>
                 <div class="hpdt_dtls hvr-sweep-to-top">
@@ -561,14 +563,14 @@
                       $brand_name = $decode_brand->en;
                     }
                     ?>
-                    <p>{{ $brand_name }}</p>
+                    <p>{{ $new_val->brand_name }}</p>
                     <a href="#">{{$new_val->product_name}}</a>
                   </div>
                   <div class="hslpricebx">
                     <span class="old-price"> QAR {{$new_val->product_old_price}} </span>
                     <span class="price"> QAR {{$new_val->product_price}} </span>
                   </div>
-                  <a class="add_crt_btn" href="#"></a>
+                  <a class="add_crt_btn" href="{{ url('/addToCart/'.$new_val->prod_id) }}"></a>
                   @if(isset($new_val->product_offer_price) && !empty($new_val->product_offer_price))
                   <div class="dis_price">50% Off</div>
                   @endif

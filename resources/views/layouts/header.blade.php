@@ -15,6 +15,20 @@
    <!-- slider -->
    <script src="{{'/assets/homecss/slider/owl.carousel.min.js'}}"></script>
    <link rel="stylesheet" href="{{'/assets/homecss/slider/owl.carousel.min.css'}}">
+   <style>
+       .cs-cart-top #notify {
+    position: absolute;
+    left: 25px;
+    top: -11px;
+    background: #ff5662;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 12px;
+    }
+   </style>
 </head>
 
 <body class="home">
@@ -354,11 +368,20 @@
                            </div> -->
                   </div>
                </div>
+
+
+               <?php $total = 0 ?>
+
+               
+                        @foreach( (array) session('cart') as $id => $details)
+                            <?php $total +=$details['quantity'] ?>
+                        @endforeach 
                <div class="col">
-                  <div class="cart_top">
-                     <a href="#"> <i><img src="{{'/assets/homecss/images/cart.svg'}}"></i>
+                  <div class="cart_top cs-cart-top">
+                     <a href="{{ url('/view_cart') }}"> <i><img src="{{'/assets/homecss/images/cart.svg'}}"></i>
                         My Cart
-                        <span> QAR 250.00</span>
+                        <!--<span> {{$total}} </span> -->
+                        <span id="notify">{{$total}}</span>
                      </a>
                   </div>
                </div>

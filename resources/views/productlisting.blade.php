@@ -163,7 +163,7 @@
                               @endif
                               <span class="price"> QAR {{ $row->product_price }} </span>
                            </div>
-                           <a class="add_crt_btn" href="#"></a>
+                           <a class="add_crt_btn" href="{{ url('/addToCart/'.$row->id) }}"></a>
                            <div class="dis_price">50% Off</div>
                         </div>
                      </div>

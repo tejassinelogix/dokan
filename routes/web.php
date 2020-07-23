@@ -32,6 +32,16 @@ Route::PATCH('/myaccount/update/{id}', 'MyaccountController@update_profile');
 Route::get('/product_listing/{id}', 'ProductListingController@index');
 //Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('/addToCart/{id}', 'ProductController@addToCart');
+Route::get('/view_cart', 'ProductController@viewCart');
+Route::post('/updateCart', 'ProductController@updateCart');
+Route::get('/removeCart/{id}', 'ProductController@removeCart');
+Route::get('/cart/checkout', 'ProductController@checkout');
+
+Route::get('/cartt', function () {
+    return view('cart1');
+});
 /* end here  */
 
 /* Redirect user to login if they type only admin in url */
