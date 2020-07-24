@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\category;
+use App\RequestOrder;
+use App\RequestOrderItems;
+use App\OrderAddress;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -197,5 +201,85 @@ class ProductController extends Controller
     {
         $data = category::latest()->paginate(50);
         return view('cartCheckout', compact('data'));
+    }
+
+    public function placeOrder(Request $request)
+    {
+        $data = $request->all();
+
+        $lastOrder = RequestOrder::orderBy('id', 'desc')->first();
+        if ( ! $lastOrder )
+        {
+            $number = 0;
+        }
+        else 
+        {
+            $number = substr($lastOrder->referanceid, 3);
+        }
+        $prefix = 'ORD' . sprintf('%06d', intval($number) + 1);
+
+        $orderId = sprintf('%06d', intval($number) + 1);
+        $refId = $prefix;
+
+        $total = 0;
+
+        // $oldCart = Session::get('cart'); 
+        // $cart = new Cart($oldCart);
+
+        foreach ($request->session('cart') as $id => $details ) 
+        {
+        
+            $total += $details['quantity'] * $details['price'];
+
+            $item = new RequestOrderItems();
+            $item->order_id = $orderId;
+            $item->request_product_name = $details['name'];
+            $item->request_product_price = $details['price'];
+            $item->request_product_qty = $details['quantity'];
+            $item->save();
+
+        }
+
+        $order = new RequestOrder();
+        $order->referanceid = $refId;
+        $order->order_id = $orderId;
+        $order->buyer_name = Auth::user()->name;
+        $order->buyer_images = "user.jpg";
+        $order->pro_name = "test";
+        $order->pro_price = "none";
+        $order->total_price = $total;
+        $order->payment_status = "cod";
+        $order->order_status = "order placed";
+        $order->save();
+
+
+
+        $address = new OrderAddress();
+        $address->order_id = $orderId;
+        $address->user_id = Auth::id();
+        $address->first_name = $data['first_name'];
+        $address->last_name = $data['last_name'];
+        $address->mobile = $data['mobile'];
+        $address->email = $data['email'];
+        $address->zone = $data['zone'];
+        $address->house = $data['house'];
+        $address->street = $data['street'];
+        $address->city = $data['city'];
+        $address->state = $data['state'];
+        $address->country = $data['Country'];
+        $address->save();
+
+        $request->session()->forget('cart');
+
+        return redirect('order/success/'.$refId);
+        
+
+    }
+
+    public function orderSuccess($id)
+    {
+        $orderId = $id;
+        $data = category::latest()->paginate(50);
+        return view('orderSuccess', compact('data', 'orderId'));
     }
 }

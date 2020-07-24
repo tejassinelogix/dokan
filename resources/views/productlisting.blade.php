@@ -163,7 +163,7 @@
                               @endif
                               <span class="price"> QAR {{ $row->product_price }} </span>
                            </div>
-                           <a class="add_crt_btn" href="{{ url('/addToCart/'.$row->id) }}"></a>
+                           <a class="add_crt_btn" id="cartbutton" href="{{ url('/addToCart/'.$row->id) }}"></a>
                            <div class="dis_price">50% Off</div>
                         </div>
                      </div>
@@ -196,4 +196,8 @@
       </div>
    </div>
 </section>
+<script>
+jQuery('a.cartbutton').click(function(){jQuery(this).append('<img src="http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_3.gif" width="20px" height="20px"/>')});
+</script>
+
 @include('layouts.footer')

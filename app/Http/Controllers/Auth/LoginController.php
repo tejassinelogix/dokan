@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -25,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/myaccount';
+    //protected $redirectTo = '/myaccount';
 
     /**
      * Create a new controller instance.
@@ -35,5 +37,20 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function redirectTo()
+    {
+        $details= url()->previous();
+        $segments = explode('/', str_replace(''.url('').'', '', $details));
+        if($segments[1] =='view_cart')
+        {
+        return('/cart/checkout');
+        }
+        if($segments[1] =='product_view')
+        {
+        return($details);
+        }
+        return('/myaccount');
     }
 }

@@ -80,9 +80,26 @@
                </div>
                <div class="col">
                   <div class="dropdown hd_login">
-                     <a class="btn dropdown-toggle" href="#" role="button" data-toggle="modal" data-target="#modalLogin">
-                        <i class="fas fa-user"></i>My Account <span>Login</span>
-                     </a>
+                      <?php
+                        
+                        if(!empty($userdata))
+                        {
+                      ?>
+                         <a class="btn dropdown-toggle" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();" role="button">
+                            <i class="fas fa-user"></i>{{$userdata[0]['name']}} <span>Logout</span>
+                         </a>
+                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                  {{ csrf_field() }}
+                              </form>
+                        <?php 
+                        }
+                        else
+                        {
+                        ?> 
+                        <a class="btn dropdown-toggle" href="#" role="button" data-toggle="modal" data-target="#modalLogin">
+                            <i class="fas fa-user"></i>My Account <span>Login</span>
+                         </a>
+                         <?php } ?>
                      <!-- Modal-Password -->
                      <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLoginLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">

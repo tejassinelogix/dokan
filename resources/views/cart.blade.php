@@ -89,7 +89,7 @@
            <div class="cart-check-mbl"> 
              <span>Continue Shopping</span> 
             @if(Auth::check())
-             <a href="{{ url('/checkout') }}"><button class="edt-btn" style="margin: 0;">Checkout</button></a>
+             <a href="{{ url('/cart/checkout') }}"><button class="edt-btn" style="margin: 0;">Checkout</button></a>
             @else
               <button class="edt-btn" style="margin: 0;" data-toggle="modal" data-target="#modalLogin">Checkout</button>
             @endif

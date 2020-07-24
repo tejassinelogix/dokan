@@ -38,6 +38,8 @@ Route::get('/view_cart', 'ProductController@viewCart');
 Route::post('/updateCart', 'ProductController@updateCart');
 Route::get('/removeCart/{id}', 'ProductController@removeCart');
 Route::get('/cart/checkout', 'ProductController@checkout');
+Route::post('/order/place', 'ProductController@placeOrder');
+Route::get('order/success/{id}', 'ProductController@orderSuccess');
 
 Route::get('/cartt', function () {
     return view('cart1');
